@@ -1,11 +1,13 @@
 version: '2'
 services:
-  website:
-    image: 'dockersecplayground/linode_lamp:v2.0'
+  WebServer:
+    image: 'dockersecplayground/linode_lamp:latest'
     stdin_open: true
     tty: true
     ports:
-      - '8090:80'
+      - '9000:80'
     volumes:
-      - './website:/var/www/'
+      - './website:/var/www/example.com/public_html/'
+    cap_add:
+      - NET_ADMIN
 networks: {}
