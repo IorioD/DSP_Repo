@@ -1,7 +1,7 @@
 version: '2'
 services:
   WebServer:
-    image: 'dockersecplayground/linode_lamp:latest'
+    image: 'dockersecplayground/linode_lamp:v1.0'
     stdin_open: true
     tty: true
     ports:
