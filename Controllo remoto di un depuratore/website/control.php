@@ -48,6 +48,9 @@
 		$output = fopen($id."/logPotenza.txt", "w");
 		fclose($output);
 
+		$output = fopen($id."/time.txt", "w");
+		fclose($output);
+
 		// faccio partire il nuovo processo
 		chdir("/var/www/example.com/public_html/".$id);
 		shell_exec("./depuratore > /dev/null 2>&1 &");
@@ -74,6 +77,10 @@
 	$potenzaFile = fopen($id."/potenza.txt", "r");
 	$potenza = fgets($potenzaFile);
 	fclose($potenzaFile);
+
+	$timeFile = fopen($id."/time.txt", "r");
+	$time = fgets($timeFile);
+	fclose($timeFile);
 
 	if (array_key_exists("submit", $_POST)) { // se l'utente ha cliccato su Invia
 
@@ -150,9 +157,15 @@
 
 			#container {
 
-				width: 50%;
+				width: 40%;
 				float: left;
 				text-align: center;
+
+			}
+
+			#container > * {
+
+				margin-top: 25px;
 
 			}
 
@@ -217,7 +230,7 @@
 		  	</tr>
 		  	<tr>
 				<td>Tempo di simulazione</td>
-				<td id='tempoSpan'>0</td>
+				<td id='tempoSpan'><?php echo $time; ?></td>
 		  	</tr>
 		  	<tr>
 				<td>Livello dell'acqua</td>
@@ -232,14 +245,6 @@
 		<canvas id="myChart"></canvas>
 
 		<script>
-
-			function addData(chart, label, data) {
-			    chart.data.labels.push(label);
-			    chart.data.datasets.forEach((dataset) => {
-				dataset.data.push(data);
-			    });
-			    chart.update();
-			}
 
 			function checkfile(id, graph) {
 
@@ -267,15 +272,25 @@
 
 					    if (http.readyState == 4 && http.status == 200) {
 
-							var data = http.responseText.split(",");
+							var values = http.responseText.split(",");
 
-							document.getElementById("livelloSpan").innerHTML = data[0];
+							document.getElementById("livelloSpan").innerHTML = values[0];
 
-							document.getElementById("potenzaSpan").innerHTML = data[1];
+							document.getElementById("potenzaSpan").innerHTML = values[1];
 
-							document.getElementById("tempoSpan").innerHTML = graph.data.labels.length + 1;
+							document.getElementById("tempoSpan").innerHTML = values[2];
 
-							addData(graph, graph.data.labels.length + 1, data[0]);
+							graph.data.labels.push(values[2]);
+						    graph.data.datasets[0].data.push(values[0]);
+
+						    if (values[2] > 100) {
+
+						    	graph.data.labels.shift();
+						    	graph.data.datasets[0].data.shift();
+
+						    }
+						    
+						    graph.update();
 
 					    }
 
@@ -294,7 +309,35 @@
 				type: "line",
 				data: {
 
-					labels: [],
+					labels: [<?php
+
+								$i = 1;
+
+								$log = fopen($id."/logLivello.txt", "r");
+
+								while(!feof($log)) {
+
+									$dato = trim(fgets($log));
+
+									if ($dato != "") {
+
+										if ($i != 1) {
+
+											echo ", ";
+
+										}
+
+										echo $i;
+
+									}
+
+									$i = $i + 1;
+								}
+
+								fclose($log);
+
+							?>],
+
 					datasets: [{
 
 						label: "Livello dell'acqua nella vasca",

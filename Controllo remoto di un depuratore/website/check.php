@@ -14,6 +14,12 @@
 
 	fclose($output);
 
-	echo $livello.",".$potenza;
+	$output = fopen($id."/time.txt", "r");
+
+	$time = fgets($output);
+
+	fclose($output);
+
+	echo $livello.",".$potenza.",".$time;
 
 ?>
