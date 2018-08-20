@@ -282,13 +282,6 @@
 
 							graph.data.labels.push(values[2]);
 						    graph.data.datasets[0].data.push(values[0]);
-
-						    if (values[2] > 100) {
-
-						    	graph.data.labels.shift();
-						    	graph.data.datasets[0].data.shift();
-
-						    }
 						    
 						    graph.update();
 
@@ -375,8 +368,11 @@
 				},
 
 				options: {
-					responsive: true,
-    				maintainAspectRatio: true
+    				elements: {
+	                    point:{
+	                        radius: 0
+	                    }
+	                }
 				}
 
 			});
