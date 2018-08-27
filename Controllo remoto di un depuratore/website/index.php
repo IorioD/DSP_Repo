@@ -9,8 +9,9 @@
 	for ($i = 1; $i < count($array); $i++) {
 		
 		$command = substr($array[$i], 0, strpos($array[$i], '/dep'));
-	    	$idps = substr($command, 0, strpos($command, ' ?'));
-	    	shell_exec('kill '.$idps);
+	    $idps = substr($command, 0, strpos($command, ' ?'));
+	    shell_exec('kill '.$idps);
+	    
 	}
 
 	if (array_key_exists("submit", $_POST)) {

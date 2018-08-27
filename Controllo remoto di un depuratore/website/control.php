@@ -62,6 +62,7 @@
 
 	}
 
+	// leggo gli input più recenti
 	$setpointFile = fopen($id."/setpoint.txt", "r");
 	$setpoint = fgets($setpointFile);
 	fclose($setpointFile);
@@ -70,6 +71,7 @@
 	$gain = fgets($gainFile);
 	fclose($gainFile);
 
+	// leggo gli output più recenti
 	$livelloFile = fopen($id."/livello.txt", "r");
 	$livello = fgets($livelloFile);
 	fclose($livelloFile);
@@ -94,7 +96,7 @@
 			
 		}
 
-		if (isset($_POST["gain"])) { // aggiorno setpoint.txt
+		if (isset($_POST["gain"])) { // aggiorno gain.txt
 
 			$gain = $_POST["gain"];
 
